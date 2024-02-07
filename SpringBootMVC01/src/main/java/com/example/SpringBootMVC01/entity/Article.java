@@ -13,7 +13,7 @@ import lombok.*;
 @Getter
 public class Article {
 
-    //처음에 테이블이 없어도, 서버 실행 시 entity를 보고 테이블 생성해준다.
+    //처음에 테이블이 없어도, 서버 실행 시 entity를 보고 "테이블 생성"해준다.
 
     @Id //PK, 대표값
     @GeneratedValue //자동 증가 : 1, 2, 3, ...
@@ -24,6 +24,8 @@ public class Article {
 
     @Column
     private String content;
+
+
 
     //생성자
 //    public Article(Long id, String title, String content) {
