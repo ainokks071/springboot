@@ -3,9 +3,11 @@ package com.example.SpringBootMVC01.dto;
 import com.example.SpringBootMVC01.entity.Article;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @Data
 public class ArticleDTO {

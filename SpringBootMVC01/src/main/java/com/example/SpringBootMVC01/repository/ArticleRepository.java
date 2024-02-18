@@ -18,7 +18,7 @@ public interface ArticleRepository extends CrudRepository<Article, Long> {
 
 
 
-//    Iterable<Article> findAll();
+//    Iterable<Article> findAll(); 메서드를 오버라이딩
     @Override
     ArrayList<Article> findAll(); //ArrayList -> List -> Collection -> Iterable
 }

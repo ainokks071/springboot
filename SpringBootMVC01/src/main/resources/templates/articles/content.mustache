@@ -40,9 +40,10 @@
 {{>layouts/header}}
 
 <div class="container mt-3">
-    <h1>게시판 상세페이지</h1>
+    <h2>게시물 상세보기</h2>
+    <br>
     <div class="card">
-        <div class="card-header"> 게시판 상세보기 </div>
+    <div class="card-header"> Board </div>
         {{#article}}
             <div class="card-body">
                 <table border="2">
@@ -64,8 +65,9 @@
                     </tbody>
                 </table>
                     <br>
-                    <button type="submit" class="btn btn-primary btn-sm" onclick="location.href='/articles/edit/{{article.id}}'">수정화면</button>
                     <button type="button" class="btn btn-success btn-sm" onclick="location.href='/articles/list'">목록으로</button>
+                    <button type="submit" class="btn btn-primary btn-sm" onclick="location.href='/articles/edit/{{article.id}}'">수정화면</button>
+                    <!-- 클라이언트 -> 서버 HTTP 메서드 요청, 4가지 : get, post, put(patch), delete but, html에서는 get, post만 지원               -->
                     <button type="button" class="btn btn-danger btn-sm" onclick="location.href='/articles/delete/{{article.id}}'">삭제하기</button>
             </div>
         {{/article}}

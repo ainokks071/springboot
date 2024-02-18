@@ -34,19 +34,20 @@ public class ArticleController {
 //    게시글 등록 기능
     @PostMapping("articles/create")
     public String create(ArticleDTO articleDTO) {
-        log.info(articleDTO.toString()); //가가가가, 나나나나
+//        log.info(articleDTO.toString()); //가가가가, 나나나나
 //      ** 파라미터 자동 수집
 //      DTO가 form데이터 받는다(@AllArgsConstructor 생성자로 초기화) : new ArticleDTO(가가가가, 나나나나);
 
 //      ** JPA
 //      1. form데이터로 초기화된 DTO -> Entity로 변환 : JPA에서, Entity는 DB가 인식 가능한 객체(=> 테이블!!)
         Article article = articleDTO.toEntity();
-        log.info(article.toString()); //null, 가가가가, 나나나나
+//        log.info(article.toString()); //null, 가가가가, 나나나나
+
 //      2. Repository : DB에 Entity를 '저장, 조회, 수정, 삭제'하게 해주는 일꾼 객체
 //        ArticleRepository는 CrudRepository를 상속받는다.(모든 메서드 사용 가능)
 //        Entity save(Entity entity) : 매개변수, 반환타입 확인해볼 것.
         Article savedArticle = articleRepository.save(article);
-        log.info(savedArticle.toString()); //id값 자동으로 넣어준다. -> 1, 가가가가, 나나나나
+//        log.info(savedArticle.toString()); //id값 자동으로 넣어준다. -> 1, 가가가가, 나나나나
 
 //        게시글 등록 직후, 게시글 상세페이지로 이동
        return "redirect:/articles/" + savedArticle.getId();
@@ -69,7 +70,7 @@ public class ArticleController {
 
 //        log.info(article.toString());
         model.addAttribute("article", article);
-        return "articles/content";
+        return "articles/content"; // content.mustache : 페이지 응답 != Data 응답
     }
 
     @GetMapping("articles/list")
@@ -98,6 +99,7 @@ public class ArticleController {
     @PostMapping("articles/edit")
     public String edit(ArticleDTO articleDTO) {
 
+//      ArticleDTO의 id필드 추가 !
         Article article = articleDTO.toEntity();
 
 //        Hibernate 절차 따라하기
@@ -115,7 +117,6 @@ public class ArticleController {
 
     @GetMapping("articles/delete/{id}")
     public String delete(@PathVariable Long id, RedirectAttributes rattr) {
-
 
 //        1. 삭제할 대상 조회, 없으면 null 반환
         Article target = articleRepository.findById(id).orElse(null);
