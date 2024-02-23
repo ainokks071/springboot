@@ -5,11 +5,13 @@ import com.example.SpringBootMVC01.entity.Article;
 import com.example.SpringBootMVC01.repository.ArticleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
@@ -130,4 +132,6 @@ public class ArticleController {
 //        3. 목록으로 리다이렉트
         return "redirect:/articles/list";
     }
+
+
 }

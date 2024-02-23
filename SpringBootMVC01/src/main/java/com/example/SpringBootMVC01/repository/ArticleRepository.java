@@ -15,9 +15,6 @@ public interface ArticleRepository extends CrudRepository<Article, Long> {
     //인터페이스지만, 스프링부트가 내부적으로 구현
     // CRUD 메서드 모두 상속받아 사용 가능
 
-
-
-
 //    Iterable<Article> findAll(); 메서드를 오버라이딩
     @Override
     ArrayList<Article> findAll(); //ArrayList -> List -> Collection -> Iterable

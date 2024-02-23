@@ -27,12 +27,10 @@ public class Article {
         if(article.title != null) {
             this.title = article.title;
         }
-
 //        article.content != null : 사용자가 '수정' 했다면, 바꿔치기
         if(article.content != null) {
             this.content = article.content;
         }
-
     }
 
 

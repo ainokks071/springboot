@@ -17,7 +17,7 @@ public class ArticleDTO {
 
 
 //    DTO를 Entity로 변환해주는 메서드
-//    게시글 작성 시, id = null !
+//    게시글 작성 시, this.id = null !
     public Article toEntity() {
         return new Article(this.id, this.title, this.content);
     }
