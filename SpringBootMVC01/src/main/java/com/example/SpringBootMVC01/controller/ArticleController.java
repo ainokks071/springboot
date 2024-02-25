@@ -58,18 +58,15 @@ public class ArticleController {
 //    특정 게시물 조회 기능
 //    @PathVariable : get방식으로 url로 넘어온 전달값 받기
     @GetMapping("articles/{id}")
-    public String show(@PathVariable Long id, Model model) {
+    public String show(@PathVariable(name = "id") Long id, Model model) {
 //        log.info("id : " + id); //문자열로 만들어라.
-
 //      Optional<T> findById(ID id);
 //      Optional의 메서드 : public T orElse(T other) {
 //      Optional<Article> article = articleRepository.findById(id); -> articleEntity에 기본생성자 있어야함!!!
 //      Article article = articleRepository.findById(id).orElse(null); -> articleEntity에 기본생성자 있어야함!!!
 
 //      아래의 두 줄을 한 줄로 :  Article article = articleRepository.findById(id).orElse(new Article(1L,"null","null"));
-        Optional<Article> optionalArticle = articleRepository.findById(id);
-        Article article = optionalArticle.orElse(new Article(1L,"null","null"));
-
+        Article article = articleRepository.findById(id).orElse(null);
 //        log.info(article.toString());
         model.addAttribute("article", article);
         return "articles/content"; // content.mustache : 페이지 응답 != Data 응답
@@ -91,7 +88,7 @@ public class ArticleController {
 
 
     @GetMapping("articles/edit/{id}")
-    public String edit(@PathVariable Long id, Model model) {
+    public String edit(@PathVariable(name = "id") Long id, Model model) {
         Article article = articleRepository.findById(id).orElse(new Article(1L, "null", "null"));
         model.addAttribute(article);
         return "articles/edit";
@@ -118,7 +115,7 @@ public class ArticleController {
     }
 
     @GetMapping("articles/delete/{id}")
-    public String delete(@PathVariable Long id, RedirectAttributes rattr) {
+    public String delete(@PathVariable(name = "id") Long id, RedirectAttributes rattr) {
 
 //        1. 삭제할 대상 조회, 없으면 null 반환
         Article target = articleRepository.findById(id).orElse(null);
