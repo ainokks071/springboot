@@ -1,8 +1,10 @@
 package com.example.SpringBootMVC01.controller;
 
 import com.example.SpringBootMVC01.dto.ArticleDTO;
+import com.example.SpringBootMVC01.dto.CommentDTO;
 import com.example.SpringBootMVC01.entity.Article;
 import com.example.SpringBootMVC01.repository.ArticleRepository;
+import com.example.SpringBootMVC01.service.CommentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,9 @@ public class ArticleController {
 //    의존성 주입(DI) : 스프링부트가 미리 만들어 놓은 객체를 가져다가 자동 연결! new연산자 없이, 객체 접근 가능 !!
     @Autowired
     private ArticleRepository articleRepository;
+
+    @Autowired
+    private CommentService commentService;
 
 //    localhost:8080/articles/form 요청
     @GetMapping("articles/form")
@@ -67,8 +72,13 @@ public class ArticleController {
 
 //      아래의 두 줄을 한 줄로 :  Article article = articleRepository.findById(id).orElse(new Article(1L,"null","null"));
         Article article = articleRepository.findById(id).orElse(null);
+
+        List<CommentDTO> comments = commentService.getComments(id);
+
 //        log.info(article.toString());
         model.addAttribute("article", article);
+        model.addAttribute("comments", comments);
+
         return "articles/content"; // content.mustache : 페이지 응답 != Data 응답
     }
 

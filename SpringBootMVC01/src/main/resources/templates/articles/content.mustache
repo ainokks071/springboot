@@ -40,12 +40,10 @@
 {{>layouts/header}}
 
 <div class="container mt-3">
-    <h2>게시물 상세보기</h2>
-    <br>
     <div class="card">
-    <div class="card-header"> Board </div>
-        {{#article}}
-            <div class="card-body">
+        <div class="card-body">
+            <h4 class="card-title">Board DetailPage</h4>
+            {{#article}}
                 <table border="2">
                     <thead>
                     <tr>
@@ -71,9 +69,18 @@
                     <button type="button" class="btn btn-danger btn-sm" onclick="location.href='/articles/delete/{{article.id}}'">삭제하기</button>
             </div>
         {{/article}}
+
+            <div class="card m-2">
+                    {{#comments}}
+                            <div class="card-header">{{nickname}}</div>
+                            <div class="card-body">{{body}}</div>
+                    {{/comments}}
+            </div>
+        </div>
+
+
         <div class="card-footer">ainokks071@gmail.com</div>
     </div>
-</div>
 
 </body>
 </html>
