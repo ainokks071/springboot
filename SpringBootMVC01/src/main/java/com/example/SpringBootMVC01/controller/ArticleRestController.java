@@ -31,6 +31,7 @@ public class ArticleRestController {
         // articleList에 데이터가 없어도 null은 찍히지 않는다. -> size()로 체크?
         return articleService.getList();
     }
+
     // 2. 특정 게시물 조회 : GET, http://localhost:8080/api/articles/1
     @GetMapping("api/articles/{id}")
     public ResponseEntity<Article> getArticle(@PathVariable(name = "id") Long id) {

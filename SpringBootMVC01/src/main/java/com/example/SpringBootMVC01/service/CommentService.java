@@ -42,12 +42,11 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
-//    2. 댓글 생성 POST, http://localhost:8080/api/articles/{articleId}}/comments + { "body" : "가가가가", "nickname" : KIM, "articleId" : 2 }
+//   2. 댓글 생성 POST, http://localhost:8080/api/articles/{articleId}}/comments + { "body" : "가가가가", "nickname" : KIM, "articleId" : 2 }
+    // 500에러
     // 예외발생 1. JSON 데이터 입력 시, comment id 입력한 경우.
     // 예외발생 2. 존재하지 않는 articleId
     // 예외발생 3. url의 articleId != json의 articleId
-
-    // 절차 : articleId로 해당 article 조회, DTO -> Entity, save, Entity -> DTO
     @Transactional //중간에 문제 발생하면 자동 rollback
     public CommentDTO create(CommentDTO commentDTO, Long articleId) {
 
@@ -56,7 +55,7 @@ public class CommentService {
             throw new IllegalArgumentException("댓글 생성 실패! id는 입력하면 안됩니다.");
         }
 
-        // 예외발생 2. 존재하지 않는 articleId
+        // 예외발생 2. 존재하지 않는 article
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new IllegalArgumentException("댓글 생성 실패! 대상 게시글이 없습니다."));
 
@@ -74,10 +73,19 @@ public class CommentService {
     }
 
 //  commentId = 1 / CommetnDTO{ "body" : "수정내용", "nickname" : KIM, "articleId" : 1 }
+//  3. 댓글 수정 : Patch, http://localhost:8080/api/comments/{commentId} + CommetnDTO{"id" : 1, "body" : "수정내용", "nickname" : KIM, "articleId" : 1 }
+    @Transactional
     public CommentDTO update(CommentDTO commentDTO, Long commentId) {
 
-        Comment target = commentRepository.findById(commentId).orElse(null);
+        Comment target = commentRepository.findById(commentId).orElseThrow(
+                () -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다.")
+        );
 
+        if(commentDTO.getId() != commentId) {
+            throw new IllegalArgumentException("url의 id와 json의 id 불일치");
+        }
+//      target{"id" : 1, "body" : "기존내용", "nickname" : "KIM", "articleId" : 1 }
+//      CommetnDTO{"id" : 1, "body" : "수정할 내용", "nickname" : "KIM", "articleId" : 1 }
         target.patch(commentDTO);
 
         Comment updated = commentRepository.save(target);
@@ -88,12 +96,16 @@ public class CommentService {
         return CommentDTO.toDTO(updated);
     }
 
+
+    @Transactional
     public CommentDTO delete(Long commentId) {
-        Comment target = commentRepository.findById(commentId).orElse(null);
-        if(target != null) {
-            commentRepository.delete(target);
-            return CommentDTO.toDTO(target);
-        }
-        return null;
+
+        Comment target = commentRepository.findById(commentId).orElseThrow(
+                ()->new IllegalArgumentException("삭제할 댓글이 없습니다.")
+        );
+
+        commentRepository.delete(target);
+
+        return CommentDTO.toDTO(target);
     }
 }

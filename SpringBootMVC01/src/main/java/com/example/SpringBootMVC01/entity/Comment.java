@@ -34,9 +34,17 @@ public class Comment {
     public static Comment toEntity(CommentDTO commentDTO, Article article) {
         return new Comment(null, commentDTO.getNickname(), commentDTO.getBody(), article);
     }
+//      target{"id" : 1, "body" : "기존내용", "nickname" : "KIM", "articleId" : 1 }
+//      CommetnDTO{"id" : 1, "body" : "수정할 내용", "nickname" : "KIM", "articleId" : 1 }
 
     public void patch(CommentDTO commentDTO) {
-        this.body = commentDTO.getBody();
-        this.nickname = commentDTO.getNickname();
+
+        if(commentDTO.getBody() != null) {
+            this.body = commentDTO.getBody();
+        }
+
+        if(commentDTO.getNickname() != null) {
+            this.nickname = commentDTO.getNickname();
+        }
     }
 }
