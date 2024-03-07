@@ -32,7 +32,9 @@
             $('#title').attr('readonly', false)
             $('#content').attr('readonly', false)
         }
+
     </script>
+
 
 
 </head>
@@ -43,8 +45,10 @@
 <div class="container mt-3">
     <div class="card">
         <div class="card-header">Article</div>
+
+        <!-- 게시글 상세 페이지-->
+        {{#article}}
         <div class="card-body">
-            {{#article}}
                 <table border="2">
                     <thead>
                     <tr>
@@ -54,35 +58,103 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {{#article}}
                         <tr>
                             <td>{{id}}</td>
                             <td>{{title}}</a></td>
                             <td>{{content}}</td>
                         </tr>
-                    {{/article}}
                     </tbody>
                 </table>
                     <br>
                     <button type="button" class="btn btn-success btn-sm" onclick="location.href='/articles/list'">목록으로</button>
-                    <button type="submit" class="btn btn-primary btn-sm" onclick="location.href='/articles/edit/{{article.id}}'">수정화면</button>
+                    <button type="submit" class="btn btn-primary btn-sm" onclick="location.href='/articles/edit/{{id}}'">수정화면</button>
                     <!-- 클라이언트 -> 서버 HTTP 메서드 요청, 4가지 : get, post, put(patch), delete but, html에서는 get, post만 지원               -->
-                    <button type="button" class="btn btn-danger btn-sm" onclick="location.href='/articles/delete/{{article.id}}'">삭제하기</button>
-            </div>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="location.href='/articles/delete/{{id}}'">삭제하기</button>
+        </div>
         {{/article}}
 
-        <!--반복문-->
+
+
+
+
+
+        <!--댓글 리스트 Mustache 반복문 : List<CommentDTO> comments, CommentDTO(id, nickname, body, articleId) -->
         {{#comments}}
             <div id="comments-{{id}}" class="card m-2">
-                <div class="card-header">{{nickname}}</div>
+                <div class="card-header">{{nickname}}
+                    <button type="button"
+                            class="btn btn-outline-primary btn-sm"
+                            data-bs-toggle="modal"
+                            data-bs-target="#comment-edit-modal"
+                            data-bs-id="{{id}}"
+                            data-bs-nickname="{{nickname}}"
+                            data-bs-body="{{body}}"
+                            data-bs-articleId="{{articleId}}">댓글 수정</button>
+                </div>
                 <div class="card-body">{{body}}</div>
             </div>
         {{/comments}}
 
+        <!-- 새 댓글 등록 Form -->
+        <div class="m-2">
+            <form>
+                <div class="mb-3 mt-3">
+                    <label for="new-comment-nickname" class="form-label">닉네임</label>
+                    <input type="text" class="form-control" id="new-comment-nickname" placeholder="Enter nickname" name="nickname">
+                </div>
+
+                <div class="mb-3">
+                    <label for="new-comment-body" class="form-label">댓글 내용</label>
+                    <input type="text" class="form-control" id="new-comment-body" placeholder="Enter body" name="body">
+                </div>
+
+                <!-- hidden : REST API 요청 시, articleId 필요 -->
+                {{#article}}
+                <input type="hidden" id="new-comment-articleId" name="articleId" value="{{id}}">
+                {{/article}}
+
+                <button type="button" id="comment-create-btn" class="btn btn-sm btn-outline-primary">댓글 등록</button>
+            </form>
+        </div>
+
+        <script>
+            <!-- ** 댓글 등록 버튼 클릭하여 서버로 데이터 전송 절차 ! ** -->
+            <!-- 버튼 변수화 -->
+            const commentCreateBtn = document.querySelector("#comment-create-btn");
+
+            <!-- 클릭 이벤트 감지, 버튼 클릭 시, 1)comment 객체 생성 2)전송-->
+            commentCreateBtn.addEventListener("click", function() {
+                const comment = {
+                    nickname : document.querySelector("#new-comment-nickname").value,
+                    body : document.querySelector("#new-comment-body").value,
+                    articleId : document.querySelector("#new-comment-articleId").value
+                }
+
+                <!-- fetch() : JS로 RestAPI HTTP(getm post, patch, delete) 요청 API -->
+                <!-- /api/articles/{articleId}}/comments + JSON { "body" : "가가가가", "nickname" : KIM, "articleId" : 2 } -->
+                const url = "/api/articles/" + comment.articleId + "/comments";
+
+                fetch(url, {
+                    method: "POST",
+                    body: JSON.stringify(comment), <!-- JS 객체 -> JSON으로 변환 -->
+                    headers: {
+                        "Content-type" : "application/json; charset=UTF-8"
+                    }
+                }).then(response => {
+                    const msg = (response.ok) ? "댓글 등록 성공 !" : "댓글 등록 실패";
+                    alert(msg);
+                    <!-- 새로고침 -->
+                    window.location.reload();
+                });
+            });
+        </script>
+
+        <!-- footer -->
         <div class="card-footer">ainokks071@gmail.com</div>
     </div>
+</div>
 
-    </div>
+
 
 </body>
 </html>
